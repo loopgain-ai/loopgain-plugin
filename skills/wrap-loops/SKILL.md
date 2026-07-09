@@ -35,18 +35,18 @@ signal combining (a) a bounded/unbounded loop construct — `max_iter`, `max_ret
 `for _ in range(`, `while True`, `while.*<.*max` — with (b) an LLM-call or
 revise/verify signal — `messages.create(`, `chat.completions`, `.invoke(`, `.kickoff(`,
 `graph.stream(`, `create_react_agent`, `AgentExecutor`, `revise(`, `verify(`, `critique`,
-`self_correct`. Full regex in `references/detection-heuristic.md`.
+`self_correct`. Full regex in `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/detection-heuristic.md`.
 
 **Phase B (read and judge):** read each shortlisted file/function in full. Ask: does
 this call an LLM repeatedly, check its output/error, and continue until a condition or a
 fixed count? Discard Phase A false positives (e.g. a `range(10)` loop over a plain list
 with no LLM call) rather than forcing a classification onto non-loop code. This mirrors
 the judgment already proven in LoopGain's hosted `/get-code` tool — see
-`references/detection-heuristic.md` for worked examples.
+`${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/detection-heuristic.md` for worked examples.
 
 ## Step 3 — Semantic and structural loops (not just literal `for`/`while`)
 
-Read `references/semantic-and-nested-loops.md`, then also scan for:
+Read `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/semantic-and-nested-loops.md`, then also scan for:
 - **Recursive functions** — a function calling itself, or mutually recursive functions,
   with an LLM call somewhere in the cycle. No loop keyword, but it's a loop.
 - **Graph/topology cycles** — a LangGraph conditional edge routing back to an
@@ -72,14 +72,14 @@ For every confirmed loop (literal or semantic), record:
   `python -c "import loopgain, os; print(os.path.dirname(loopgain.__file__))"` or
   `pip show -f loopgain` — and **read the actual adapter file**
   (`loopgain/integrations/{langgraph,crewai,autogen,langchain,openai_agents,claude_agent_sdk}.py`,
-  reference signatures in `references/adapter-notes.md`). Never guess constructor kwargs
+  reference signatures in `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/adapter-notes.md`). Never guess constructor kwargs
   from memory — the six adapters differ meaningfully. If `loopgain` isn't installed in
   the target env, fall back to the raw `should_continue()`/`observe()` API.
 
 **Nesting:** if a candidate's body contains or calls into another candidate loop, record
 both as separate entries with the relationship stated explicitly (e.g. "outer:
 `file.py:10` — retries a multi-step plan; contains inner: `file.py:42` — retries a
-single step's LLM call"). Read `references/semantic-and-nested-loops.md` for the
+single step's LLM call"). Read `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/semantic-and-nested-loops.md` for the
 concrete anti-pattern to flag: **the same error variable reused for both levels** — the
 inner per-step score is not a valid proxy for outer task-level completion, and vice
 versa. This connects to LoopGain's own cascade-control framing (inner fast loop / outer
@@ -89,7 +89,7 @@ each with its own appropriate signal.
 
 ## Step 5 — Assess verifier strength before proposing any wrap
 
-Read `references/verifier-design.md`, then classify what actually produces the value
+Read `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/verifier-design.md`, then classify what actually produces the value
 fed to `observe()` for each candidate:
 - **Hard/measurable** (test pass/fail counts, schema-validation errors, a numeric
   distance to a known target, exception occurrence) — proceed normally.
@@ -97,7 +97,7 @@ fed to `observe()` for each candidate:
   independent check, a bare "does this look done" judgment, or **any**
   perplexity/entropy/MDL-based signal) — flag this to the user as the weak point. **Never
   propose an MDL/perplexity/entropy signal as the `observe()` input** — see
-  `references/verifier-design.md` for why. Instead propose: (1) the most concrete,
+  `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/verifier-design.md` for why. Instead propose: (1) the most concrete,
   countable proxy available for the thing being judged, and (2) a mandatory independent
   adversarial-review pass whenever the result drives a real decision, spend, or anything
   published.
@@ -126,12 +126,12 @@ must:
 - Preserve 100% of the user's original names/logic outside the loop-control lines.
 - Pick a `target_error`/signal per the Step 5 classification, not one constant reused
   everywhere; for nested candidates, use genuinely different signals per level.
-- Include the disclaimer from `references/disclaimer-and-savings.md` (verbatim) as a
+- Include the disclaimer from `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/disclaimer-and-savings.md` (verbatim) as a
   code comment directly above the `lg = LoopGain(...)` line.
 - For any candidate flagged soft/self-graded in Step 5, include the strengthened
   verifier snippet (proxy signal + adversarial-review call) as part of the diff, not
   just a chat mention.
-- Include a savings-note comment per `references/disclaimer-and-savings.md`'s
+- Include a savings-note comment per `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/disclaimer-and-savings.md`'s
   stop-mechanism-specific paragraphs for literal/structural agent loops — the user's own
   literal `detected_cap` paired with the published aggregate benchmark, never a
   fabricated per-repo number. **No savings claim at all for semantic-loop candidates** —
@@ -139,7 +139,7 @@ must:
 
 ## Step 8 — Optional dashboard hookup (browser flow, not an API call)
 
-Read `references/dashboard-flow.md`. The free-dashboard-token flow is Turnstile-gated
+Read `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/dashboard-flow.md`. The free-dashboard-token flow is Turnstile-gated
 and fail-closed server-side — **this skill cannot mint a token programmatically**. After
 wrapping, ask once whether the user wants dashboard visibility; if yes, tell them to (1)
 open loopgain.ai and use the "get free hosted-dashboard access" CTA, (2) confirm via the
