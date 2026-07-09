@@ -74,7 +74,14 @@ For every confirmed loop (literal or semantic), record:
   (`loopgain/integrations/{langgraph,crewai,autogen,langchain,openai_agents,claude_agent_sdk}.py`,
   reference signatures in `${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/adapter-notes.md`). Never guess constructor kwargs
   from memory — the six adapters differ meaningfully. If `loopgain` isn't installed in
-  the target env, fall back to the raw `should_continue()`/`observe()` API.
+  the target env, fall back to the raw `should_continue()`/`observe()` API for the
+  proposed code — but this does **not** mean skipping the install question; see the
+  package-check note in Step 6.
+
+**Package check (run once per scan, not per-candidate):** `python -c "import loopgain"`
+(or `pip show loopgain`) tells you whether the target environment has the library at
+all. Record this once — you'll surface it in Step 6's summary, not silently. Never let a
+proposed wrap imply `loopgain` is already available if it isn't.
 
 **Nesting:** if a candidate's body contains or calls into another candidate loop, record
 both as separate entries with the relationship stated explicitly (e.g. "outer:
@@ -104,7 +111,18 @@ fed to `observe()` for each candidate:
 
 ## Step 6 — Present a summary before touching any file
 
-A numbered list, one line per candidate:
+If Step 4's package check found `loopgain` is not installed in the target environment,
+say so plainly before the candidate list, with the exact install command — including the
+right extras for whichever frameworks were detected among the candidates (e.g.
+`pip install 'loopgain[langgraph]'` if any candidate needs the LangGraph adapter, plain
+`pip install loopgain` if none do, or `pip install 'loopgain[all]'` if several different
+frameworks are in play). Ask once whether to run it now; if yes, run the install via
+`Bash` and confirm it succeeded before proposing any wraps that `import loopgain`. If no
+(or if they'd rather do it themselves), proceed anyway — the proposed diffs are still
+useful to review even before the package is installed, but never imply it's already
+available if the check said otherwise.
+
+Then, a numbered list, one line per candidate:
 ```
 1. src/agent.py:42 — fixed cap of 20, no framework detected
 2. src/graph.py:88 — LangGraph loop, no explicit bound

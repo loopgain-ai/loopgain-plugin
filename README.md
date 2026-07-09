@@ -25,9 +25,12 @@ The skill will:
 1. Find candidate loops (literal, structural, and semantic — see below).
 2. Classify each one (stop mechanism, detected cap, framework, nesting relationships).
 3. Assess whether the existing verifier is strong enough, and propose a fix if not.
-4. Show you a summary list and ask which candidates to act on.
-5. Propose a reviewed, per-file diff for each one you select — never a blind pass.
-6. Optionally point you at the free hosted dashboard to watch it converge live.
+4. Check whether `loopgain` is already installed in your environment — if not, tell you
+   the exact install command (with the right extras for any framework it detected) and
+   offer to run it for you.
+5. Show you a summary list and ask which candidates to act on.
+6. Propose a reviewed, per-file diff for each one you select — never a blind pass.
+7. Optionally point you at the free hosted dashboard to watch it converge live.
 
 ## Why not auto-apply everything on install?
 
