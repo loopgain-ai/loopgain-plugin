@@ -11,7 +11,7 @@ version: 0.1.0
 Scan a repo for AI-agent verify-revise loops — literal, structural, and semantic, at
 every nesting level — and propose [LoopGain](https://github.com/loopgain-ai/loopgain)
 rewrites. **Never auto-apply.** Every proposed change goes through the normal `Edit` tool
-so the user's own approval flow gates it, exactly like any other edit you'd make.
+so the user's own approval flow gates it, exactly like any other edit.
 
 Read the relevant `references/` file before each step below — don't preload all of them,
 that wastes context; each is small and scoped to one step.
@@ -79,9 +79,9 @@ For every confirmed loop (literal or semantic), record:
   package-check note in Step 6.
 
 **Package check (run once per scan, not per-candidate):** `python -c "import loopgain"`
-(or `pip show loopgain`) tells you whether the target environment has the library at
-all. Record this once — you'll surface it in Step 6's summary, not silently. Never let a
-proposed wrap imply `loopgain` is already available if it isn't.
+(or `pip show loopgain`) reveals whether the target environment has the library at all.
+Record this once and surface it in Step 6's summary, not silently. Never let a proposed
+wrap imply `loopgain` is already available if it isn't.
 
 **Nesting:** if a candidate's body contains or calls into another candidate loop, record
 both as separate entries with the relationship stated explicitly (e.g. "outer:

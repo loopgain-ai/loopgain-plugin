@@ -1,6 +1,6 @@
 """Example: before/after for a raw generate-verify-revise loop with a
 fixed iteration cap and no framework. This is the fallback shape used
-when no adapter matches (see references/adapter-notes.md).
+when no adapter matches (see ${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/adapter-notes.md).
 """
 
 # ── BEFORE ──────────────────────────────────────────────────────────────

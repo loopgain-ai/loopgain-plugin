@@ -1,6 +1,6 @@
 """Example: a nested loop — an outer plan-level retry containing an inner
 step-level retry. Two independent LoopGain instances, two different
-signals. See references/semantic-and-nested-loops.md for the anti-pattern
+signals. See ${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/semantic-and-nested-loops.md for the anti-pattern
 this specifically avoids: reusing one signal across both levels.
 """
 

@@ -1,5 +1,5 @@
 """Example: before/after for a LangGraph verify-revise graph with a cycle
-(no explicit iteration bound). See references/adapter-notes.md — always
+(no explicit iteration bound). See ${CLAUDE_PLUGIN_ROOT}/skills/wrap-loops/references/adapter-notes.md — always
 read the installed loopgain/integrations/langgraph.py before generating a
 real rewrite; this is illustrative, not a spec.
 """
