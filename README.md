@@ -19,11 +19,21 @@ estimate.
 /plugin install loopgain
 ```
 
+No account, API key, or signup is required to use the scan-and-propose features — the
+free dashboard (mentioned above) is a separate, optional step you only need if you want
+live visibility into a wrapped loop.
+
 ## Use
 
-In any repo, ask Claude to scan for LoopGain-wrappable loops, e.g.:
+In any repo, ask Claude to scan for LoopGain-wrappable loops. A few example prompts:
 
 > scan my repo for verify-revise loops to wrap with LoopGain
+
+> wrap this loop with LoopGain
+
+> help me build a stronger verifier for this loop
+
+> check my repo for fixed max_iterations caps
 
 The skill will:
 1. Find candidate loops (literal, structural, and semantic — see below).
@@ -52,6 +62,21 @@ on a document or plan), it does **not** propose an entropy/perplexity/MDL-based 
 that approach has been tested and found to have no measured edge over naive patience.
 Instead it proposes a concrete, countable proxy signal plus an independent adversarial
 review step — the one pattern proven to work for this case.
+
+## Privacy and data handling
+
+This skill runs entirely locally, inside your own Claude Code session — it reads files
+from your repo using Claude Code's own tools and never sends your code anywhere. The
+only network calls it can ever trigger are the ones you explicitly approve for the
+optional dashboard hookup (a link you open yourself in your browser). See
+[loopgain.ai/privacy](https://loopgain.ai/privacy) for LoopGain's own privacy policy,
+which covers the free hosted-dashboard service.
+
+## Support
+
+Questions, bugs, or feature requests: open an issue at
+[github.com/loopgain-ai/loopgain-plugin](https://github.com/loopgain-ai/loopgain-plugin/issues),
+or email [hello@loopgain.ai](mailto:hello@loopgain.ai).
 
 ## License
 
