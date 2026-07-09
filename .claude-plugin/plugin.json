@@ -1,7 +1,7 @@
 {
   "name": "loopgain",
   "version": "0.1.0",
-  "description": "Scans a codebase for AI-agent verify-revise loops — literal, structural, and semantic — and proposes reviewed LoopGain wraps. Never auto-applied.",
+  "description": "Scans a codebase for AI-agent verify-revise loops and proposes reviewed LoopGain wraps — never auto-applied. Free hosted-dashboard access included to watch loops converge live.",
   "author": { "name": "Dave Fitzsimmons", "email": "hello@loopgain.ai", "url": "https://loopgain.ai" },
   "homepage": "https://loopgain.ai",
   "repository": "https://github.com/loopgain-ai/loopgain-plugin",

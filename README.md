@@ -8,6 +8,10 @@ iterative reasoning/drafting loops — at every nesting level, and proposes
 **Nothing is auto-applied.** Every proposed rewrite goes through Claude Code's normal
 `Edit`-tool approval flow — you review and approve (or reject) each file individually.
 
+**Free dashboard included.** Individual users get free hosted-dashboard access — once
+you're wrapped, watch each loop's savings and convergence live, not just as a one-time
+estimate.
+
 ## Install
 
 ```
