@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "loopgain",
+  "version": "1.0.0",
+  "description": "LoopGain plugin marketplace — scan a codebase for AI-agent verify-revise loops and propose reviewed LoopGain wraps.",
+  "owner": {
+    "name": "Dave Fitzsimmons",
+    "email": "hello@loopgain.ai"
+  },
+  "plugins": [
+    {
+      "name": "loopgain",
+      "description": "Scans a codebase for AI-agent verify-revise loops and proposes reviewed LoopGain wraps — never auto-applied. Free hosted-dashboard access included to watch loops converge live.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Dave Fitzsimmons",
+        "email": "hello@loopgain.ai"
+      },
+      "source": "./",
+      "category": "development"
+    }
+  ]
+}
