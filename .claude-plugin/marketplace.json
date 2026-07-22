@@ -10,8 +10,8 @@
   "plugins": [
     {
       "name": "loopgain",
-      "description": "Scans a codebase for AI-agent verify-revise loops and proposes reviewed LoopGain wraps — never auto-applied. Free hosted-dashboard access included to watch loops converge live.",
-      "version": "0.1.0",
+      "description": "Scans a codebase for AI-agent verify-revise loops and proposes reviewed LoopGain wraps, and governs Claude Code's own iterate-until-done loop so it stops on convergence instead of a guessed turn cap. Never auto-applied.",
+      "version": "0.2.0",
       "author": {
         "name": "Dave Fitzsimmons",
         "email": "hello@loopgain.ai"
