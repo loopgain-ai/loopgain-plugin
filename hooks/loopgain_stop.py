@@ -40,15 +40,17 @@ import tempfile
 CONFIG_NAME = ".loopgain-goal.json"
 
 
-def _allow_stop(context: str | None = None) -> None:
-    """Let the turn end. Optionally surface a note to Claude (non-blocking)."""
-    if context:
-        print(json.dumps({
-            "hookSpecificOutput": {
-                "hookEventName": "Stop",
-                "additionalContext": context,
-            }
-        }))
+def _allow_stop(note: str | None = None) -> None:
+    """Let the turn end cleanly.
+
+    Emit NOTHING on stdout: any stdout payload on a Stop hook — including
+    `hookSpecificOutput.additionalContext` — makes Claude Code *continue* the
+    turn rather than stop. A clean stop is exit 0 with an empty stdout. The
+    optional note goes to stderr (diagnostics / transcript), which does not
+    affect the stop.
+    """
+    if note:
+        print(note, file=sys.stderr)
     sys.exit(0)
 
 

@@ -64,9 +64,11 @@ This plugin wires the real `loopgain` library into Claude Code's `Stop` hook. Af
 turn it runs your project's own verifier, reads one error number (e.g. failing-test
 count), feeds the trajectory to LoopGain, and:
 
-- **keeps Claude working** while the error is falling (`CONVERGING` / `FAST_CONVERGE`);
-- **lets it stop** the moment LoopGain reads `TARGET_MET`, `STALLING`, or `DIVERGING` —
-  naming the best turn it saw.
+- **keeps Claude working** while the error is falling (`CONVERGING` / `FAST_CONVERGE`) —
+  it blocks the stop and tells Claude the error is still dropping;
+- **lets it stop cleanly** the moment LoopGain reads `TARGET_MET`, `STALLING`, or
+  `DIVERGING`, instead of grinding on to a guessed turn count (the reason, and the
+  best turn it saw, are logged to the hook's stderr).
 
 Ask Claude to set it up:
 

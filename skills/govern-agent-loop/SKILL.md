@@ -113,11 +113,11 @@ LoopGain is the stop rule now:
 **Without `/goal`:** just ask Claude to do the work ("make all tests pass"). The hook
 governs the turns the same way — `/goal` is not required.
 
-Either way, describe what they'll see: the hook blocks the stop while the error is
-falling ("LoopGain reads the loop as CONVERGING (error 8 → 5); keep going") and allows
-it on target/stall/divergence, naming the best turn seen. It makes **no cost-savings
-claim** for this use — that number is measured on framework agent loops, not on Claude
-Code's own loop.
+Either way, describe what they'll see: while the error is falling the hook blocks the
+stop and Claude keeps working; once the loop hits target / stalls / diverges the hook
+lets the turn end cleanly (the reason and the best turn seen are written to the hook's
+stderr for logs, not forced into the chat). It makes **no cost-savings claim** for this
+use — that number is measured on framework agent loops, not on Claude Code's own loop.
 
 ## Step 5 — Disarm
 

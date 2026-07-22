@@ -1,6 +1,6 @@
 {
   "name": "loopgain",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Scans a codebase for AI-agent verify-revise loops and proposes reviewed LoopGain wraps, and governs Claude Code's own iterate-until-done loop so it stops on convergence instead of a guessed turn cap. Never auto-applied; the Stop hook is inert until a project is explicitly armed.",
   "author": { "name": "Dave Fitzsimmons", "email": "hello@loopgain.ai", "url": "https://loopgain.ai" },
   "homepage": "https://loopgain.ai",
