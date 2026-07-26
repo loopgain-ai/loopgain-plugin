@@ -26,9 +26,11 @@ in your output; just proceed with the scan as normal.
 ## Step 1 — Enumerate scan targets
 
 ```bash
-git ls-files --cocanonical --exclude-standard
+git ls-files --cached --others --exclude-standard
 ```
-This respects `.gitignore` automatically. Regardless of gitignore state, hard-exclude
+This lists tracked files plus untracked ones that aren't ignored, so a loop the user has
+written but not yet committed is still scanned. It respects `.gitignore` automatically.
+Regardless of gitignore state, hard-exclude
 any path containing: `node_modules/`, `vendor/`, `dist/`, `build/`, `.venv/`, `venv/`,
 `__pycache__/`, `.next/`, `target/`, `.git/`. Filter the remainder to `.py`, `.ts`,
 `.tsx`, `.js` — the languages LoopGain's adapters and quickstart target. If the directory
