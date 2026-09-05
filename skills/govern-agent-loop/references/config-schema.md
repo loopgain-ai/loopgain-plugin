@@ -2,8 +2,13 @@
 
 # `.loopgain-goal.json` — full schema
 
-Placed at a project root, this file arms that project for the plugin's `Stop` hook.
-Absent = the hook is a silent no-op there.
+Placed at a project root, this file proposes a verifier for the plugin's `Stop` hook.
+Absent = silent no-op. Present but unapproved = no command execution and stop allowed.
+The trusted installed `hooks/approve_goal.py` requires explicit interactive terminal
+approval. User-owned records outside the repository bind the canonical project path
+and SHA-256 of the exact config bytes; any edit requires approval again. The hook
+never creates an approval record. Approval does not sandbox the verifier or pin the
+contents of scripts/tests it runs.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
@@ -33,7 +38,7 @@ keep `no_match_means_zero: true` so a clean run reads as `error = 0` → converg
 ## Fail-open guarantees
 
 The hook allows the stop (never traps the session) when any of these hold: no config
-file, malformed config, missing `verify_command`/`error_pattern`, `loopgain` not
+file, absent/invalid/mismatched local approval, malformed config, missing `verify_command`/`error_pattern`, `loopgain` not
 importable, verifier errors or times out, a non-matching pattern with
 `no_match_means_zero: false`, or `max_turns` reached. Governing only ever *blocks* a
 stop when it has a real number and LoopGain says the loop is still improving.

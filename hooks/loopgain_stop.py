@@ -3,7 +3,8 @@
 
 Claude Code fires a `Stop` hook after each turn. This script:
   1. Does nothing at all unless the current project has been *explicitly armed*
-     with a `.loopgain-goal.json` config file (created by the plugin's
+     with a user-owned approval for the exact `.loopgain-goal.json` config
+     file (prepared by the plugin's
      `govern-agent-loop` skill). No config -> silent exit 0, zero overhead.
   2. When armed: runs the project's own verify command, extracts an error
      number (e.g. failing-test count), feeds the running trajectory to the real
@@ -36,6 +37,9 @@ import re
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
+
+from goal_approval import is_approved, read_goal
 
 CONFIG_NAME = ".loopgain-goal.json"
 
@@ -74,7 +78,7 @@ def main() -> None:
     except Exception:
         sys.exit(0)
 
-    cwd = event.get("cwd") or os.getcwd()
+    cwd = os.path.realpath(event.get("cwd") or os.getcwd())
     session_id = event.get("session_id") or "default"
 
     # 2. Fast no-op: unarmed projects exit before importing anything heavy.
@@ -83,9 +87,13 @@ def main() -> None:
         sys.exit(0)
 
     try:
-        cfg = json.loads(open(config_file, encoding="utf-8").read())
+        raw_config, cfg = read_goal(Path(cwd))
     except Exception as e:
         _allow_stop(f"LoopGain: could not read {CONFIG_NAME} ({e}); not governing this turn.")
+
+    if not is_approved(Path(cwd), raw_config):
+        _allow_stop("LoopGain: verifier is not approved for this project/configuration; no command ran. "
+                    "Review it and run the installed plugin\'s hooks/approve_goal.py from your terminal.")
 
     verify_command = cfg.get("verify_command")
     error_pattern = cfg.get("error_pattern")

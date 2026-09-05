@@ -74,7 +74,7 @@ Ask Claude to set it up:
 
 > govern this task with LoopGain so it stops when the tests stop getting closer to passing
 
-That arms the current project by writing a reviewed `.loopgain-goal.json` — for example:
+That prepares a `.loopgain-goal.json` for review — for example:
 
 ```json
 {
@@ -85,6 +85,28 @@ That arms the current project by writing a reviewed `.loopgain-goal.json` — fo
 }
 ```
 
+Creating this file does **not** authorize execution. From your own interactive terminal,
+run the approval command from the trusted installed plugin (replace the paths):
+
+```sh
+python3 /path/to/installed/loopgain-plugin/hooks/approve_goal.py /path/to/project
+```
+
+Review the displayed configuration and type `APPROVE`. The command records approval
+in `~/.loopgain/goal-approvals/`, outside the repository, bound to the canonical
+project path and SHA-256 of the entire config file. Any config edit (including
+formatting), project move, or copied checkout requires approval again. Existing
+configs from older plugin versions must also be approved. The hook never writes an
+approval. Missing, malformed, shared-permission or symlinked approval records deny
+execution and let the turn end. Directories must be user-owned with mode `0700`
+and records with mode `0600`.
+
+Approval trusts the selected command **and the project code it runs**; it does not
+sandbox tests, pin their contents, or protect against a malicious process already
+running as your user. Review changes to scripts/tests before rerunning them. Remove
+the matching project record from `~/.loopgain/goal-approvals/` to revoke approval
+permanently, or delete `.loopgain-goal.json` to stop execution while it is absent.
+
 Then run your task **with** `/goal` (drop the turn-cap clause — LoopGain is the stop
 rule now):
 
@@ -94,10 +116,10 @@ rule now):
 
 …or **without** it — just ask Claude to do the work. The hook fires either way.
 
-It **fails open**: no config, no `loopgain` installed, an unreadable verifier, or the
+Execution fails closed without approval; stopping remains allowed. No config, no
+`loopgain` installed, an unreadable verifier, or the
 `max_turns` cap all simply allow the stop. It can only ever *block* a stop when it has a
-real number and the loop is genuinely still improving. Delete `.loopgain-goal.json` to
-disarm. No cost-savings figure is claimed for this use — that number is measured on
+real number and the loop is still improving. No cost-savings figure is claimed for this use — that number is measured on
 framework agent loops, not on Claude Code's own loop.
 
 ## Why not auto-apply everything on install?
@@ -122,11 +144,10 @@ review step — the one pattern proven to work for this case.
 Everything runs entirely locally, inside your own Claude Code session — the skills read
 files from your repo using Claude Code's own tools and never send your code anywhere. The
 `Stop` hook, when a project is armed, runs the `verify_command` **you** put in that
-project's `.loopgain-goal.json` (your own test/lint command, in your own repo) and passes
-only a single error number to the local `loopgain` library — no code, no output, leaves
-your machine. The only network calls the plugin can ever trigger are the ones you
-explicitly approve for the optional dashboard hookup (a link you open yourself in your
-browser). See [loopgain.ai/privacy](https://loopgain.ai/privacy) for LoopGain's own
+project's `.loopgain-goal.json` after separate local approval and passes a single
+error number to the `loopgain` library. The approved verifier may access files or the
+network with your user permissions; review that command and its scripts. Library
+telemetry follows the installed LoopGain version's own settings. See [loopgain.ai/privacy](https://loopgain.ai/privacy) for LoopGain's own
 privacy policy, which covers the free hosted-dashboard service.
 
 ## Support
